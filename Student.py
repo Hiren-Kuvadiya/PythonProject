@@ -2,11 +2,13 @@ import unittest
 
 
 class Student:
+    num_students = 0
     def __init__(self, name, student_class, age, place=None):
         self.name = name
         self.student_class = student_class
         self.age = age
         self.place = place
+        Student.num_students += 1
 
 
 # Defining a separate test case here
