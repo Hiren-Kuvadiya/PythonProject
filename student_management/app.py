@@ -1,9 +1,9 @@
 from flask import Flask, request, redirect, render_template_string, url_for
+import os
 import mysql.connector
 from mysql.connector import Error
 
 app = Flask(__name__)
-
 
 def create_db_connection():
     return mysql.connector.connect(
@@ -38,6 +38,10 @@ def create_students_table():
             print("MySQL connection is closed")
 
 create_students_table()
+
+# Get the directory of the current script
+current_dir = os.path.dirname(__file__)
+
 @app.route('/')
 def index():
     # Fetch all students to display
@@ -47,7 +51,12 @@ def index():
     students = cursor.fetchall()
     cursor.close()
     conn.close()
-    return render_template_string(open('index.html').read(), students=students)
+
+    # Construct the file path to the HTML template
+    template_path = os.path.join(current_dir, 'templates', 'index.html')
+
+    # Read the template file and render it
+    return render_template_string(open(template_path).read(), students=students)
 
 
 @app.route('/add_student', methods=['POST'])
@@ -83,8 +92,11 @@ def edit_student(student_id):
     if request.method == 'POST':
         return redirect(url_for('index'))
     else:
-        # Assuming you have a separate HTML form for editing
-        return render_template_string(open('edit_student.html').read(), student=student)
+        # Construct the file path to the HTML template
+        template_path = os.path.join(current_dir, 'templates', 'edit_student.html')
+
+        # Read the template file and render it
+        return render_template_string(open(template_path).read(), student=student)
 
 
 @app.route('/delete_student/<int:student_id>', methods=['POST'])

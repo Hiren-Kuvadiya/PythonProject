@@ -1,4 +1,4 @@
-from Student import Student
+from student_management.Student import Student
 from ListMapping import ListMapping
 
 
